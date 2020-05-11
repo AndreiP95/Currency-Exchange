@@ -29,6 +29,13 @@ class DataConstants {
     }
 }
 
+class SettingsConstants {
+    companion object {
+        val timeList = mutableListOf("3", "5", "15")
+        val currencyList = mutableListOf("EUR", "USD", "BGN", "RON")
+    }
+}
+
 class CalendarConstants {
     companion object {
         const val DATE_FORMAT = "yyyy-MM-dd"

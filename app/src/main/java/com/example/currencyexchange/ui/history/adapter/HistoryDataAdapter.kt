@@ -1,6 +1,5 @@
 import android.content.Context
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -83,7 +82,6 @@ class HistoryDataAdapter(val context: Context) :
                 lineEntries.add(Entry(counter, it.toFloat()))
             }
         }
-        Log.d("TAG", "$lineEntries ")
         return lineEntries
     }
 
