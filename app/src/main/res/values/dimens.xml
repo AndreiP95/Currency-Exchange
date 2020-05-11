@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="normal_text">14sp</dimen>
+    <dimen name="large_text">16sp</dimen>
+    <dimen name="x_large_text">18sp</dimen>
+
+
+    <dimen name="currency_item_height">50dp</dimen>
+
+</resources>

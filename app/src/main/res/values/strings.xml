@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Currency exchange</string>
+    <string name="dashboard_continue">Save &amp; Continue</string>
+    <string name="refresh_timer_label">Set refresh timer</string>
+    <string name="base_currency_label">Set base currency</string>
+    <string name="error_icon">Error icon</string>
+    <string name="error_text">Something went wrong. Please retry</string>
+    <string name="error_no_internet">Something went wrong. Please retry</string>
+    <string name="retry">Retry</string>
+</resources>
