@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.item_chart.view.*
 import java.util.*
 
 
-class HistoryDataAdapter(val context: Context) :
+class HistoryDataAdapter(val context: Context?) :
     RecyclerView.Adapter<HistoryDataAdapter.HistoryViewHolder>(
     ) {
 
@@ -52,7 +52,7 @@ class HistoryDataAdapter(val context: Context) :
     private fun updateDataSet(fxHistoryData: FxHistoryData, position: Int) {
         lineDataSet = LineDataSet(getEntries(fxHistoryData, position), "")
         lineDataSet.setDrawFilled(true)
-        lineDataSet.fillDrawable = context.getDrawable(R.drawable.blue_to_white_gradient)
+        lineDataSet.fillDrawable = context?.getDrawable(R.drawable.blue_to_white_gradient)
         lineDataSet.valueTextColor = Color.BLACK
         lineDataSet.valueTextSize = 12f
         lineDataSet.label = ""

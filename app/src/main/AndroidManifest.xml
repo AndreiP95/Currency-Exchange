@@ -13,13 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".utils.BaseActivity"></activity>
-        <activity android:name=".ui.settings.SettingsActivity" />
-        <activity android:name=".ui.history.HistoryActivity" />
-        <activity android:name=".ui.dashboard.DashboardActivity">
+        <activity android:name=".ui.BaseActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
