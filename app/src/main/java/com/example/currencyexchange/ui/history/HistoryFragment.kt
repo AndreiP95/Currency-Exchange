@@ -22,7 +22,7 @@ class HistoryFragment : BaseFragment() {
 
     private lateinit var binding: FragmentHistoryBinding
     private val historyViewModel by viewModel<HistoryViewModel>()
-    private val historyDataAdapter: HistoryDataAdapter by lazy { HistoryDataAdapter(context) }
+    private val historyDataAdapter: HistoryDataAdapter by lazy { HistoryDataAdapter(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

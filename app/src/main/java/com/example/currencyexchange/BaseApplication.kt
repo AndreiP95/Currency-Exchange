@@ -5,6 +5,7 @@ import com.example.currencyexchange.network.FxNetworkInstance
 import com.example.currencyexchange.network.fxdata.CurrenciesClient
 import com.example.currencyexchange.network.fxhistory.HistoryClient
 import com.example.currencyexchange.ui.dashboard.DashboardViewModel
+import com.example.currencyexchange.ui.graph.GraphViewModel
 import com.example.currencyexchange.ui.history.HistoryViewModel
 import com.example.currencyexchange.ui.settings.SettingsViewModel
 import org.koin.android.ext.koin.androidContext
@@ -20,6 +21,7 @@ class BaseApplication : Application() {
         viewModel { DashboardViewModel() }
         viewModel { HistoryViewModel() }
         viewModel { SettingsViewModel() }
+        viewModel { GraphViewModel() }
     }
 
     val clientModule = module {

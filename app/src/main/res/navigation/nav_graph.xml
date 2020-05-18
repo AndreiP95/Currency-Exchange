@@ -13,6 +13,10 @@
         <action
             android:id="@+id/action_settingsFragment_to_dashboardFragment"
             app:destination="@id/dashboardFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/fragment_open_exit"
             app:popUpTo="@+id/dashboardFragment"
             app:popUpToInclusive="true" />
     </fragment>
@@ -24,8 +28,15 @@
         <action
             android:id="@+id/action_historyFragment_to_dashboardFragment"
             app:destination="@id/dashboardFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/fragment_open_exit"
             app:popUpTo="@+id/dashboardFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_historyFragment_to_graphFragment"
+            app:destination="@id/graphFragment" />
     </fragment>
     <fragment
         android:id="@+id/dashboardFragment"
@@ -34,9 +45,38 @@
         tools:layout="@layout/fragment_dashboard">
         <action
             android:id="@+id/action_dashboardFragment_to_historyFragment"
-            app:destination="@id/historyFragment" />
+            app:destination="@id/historyFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/fragment_open_exit" />
         <action
             android:id="@+id/action_dashboardFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
+            app:destination="@id/settingsFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/fragment_open_exit" />
+    </fragment>
+    <fragment
+        android:id="@+id/graphFragment"
+        android:name="com.example.currencyexchange.ui.graph.GraphFragment"
+        android:label="fragment_graph"
+        tools:layout="@layout/fragment_graph">
+        <argument
+            android:name="fxData"
+            app:argType="com.example.currencyexchange.network.fxhistory.model.FxHistoryData" />
+        <argument
+            android:name="currency"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_graphFragment_to_historyFragment"
+            app:destination="@id/historyFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/fragment_open_exit"
+            app:popUpTo="@+id/historyFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>
