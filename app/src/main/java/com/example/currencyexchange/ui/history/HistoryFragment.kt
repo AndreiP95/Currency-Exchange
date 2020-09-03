@@ -50,8 +50,6 @@ class HistoryFragment : BaseFragment() {
         retrieveHistoryData()
     }
 
-    // TODO -> Refactor with coroutines
-
     private fun retrieveHistoryData() {
         val historyDataSetObserver = Observer<FxHistoryData> { fxHistoryData ->
             if (fxHistoryData == null) {
