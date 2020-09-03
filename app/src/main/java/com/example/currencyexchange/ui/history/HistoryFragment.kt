@@ -2,29 +2,55 @@ package com.example.currencyexchange.ui.history
 
 import HistoryDataAdapter
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.currencyexchange.databinding.ActivityHistoryBinding
+import com.example.currencyexchange.R
+import com.example.currencyexchange.databinding.FragmentHistoryBinding
 import com.example.currencyexchange.network.fxhistory.model.FxHistoryData
+import com.example.currencyexchange.utils.BaseFragment
 import kotlinx.android.synthetic.main.layout_error.view.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class HistoryActivity : AppCompatActivity() {
 
+class HistoryFragment : BaseFragment() {
+
+    private lateinit var binding: FragmentHistoryBinding
     private val historyViewModel by viewModel<HistoryViewModel>()
-    private lateinit var binding: ActivityHistoryBinding
     private val historyDataAdapter: HistoryDataAdapter by lazy { HistoryDataAdapter(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityHistoryBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val action = HistoryFragmentDirections.actionHistoryFragmentToDashboardFragment()
+                NavHostFragment.findNavController(this@HistoryFragment).navigate(action)
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = DataBindingUtil.inflate(
+            inflater, R.layout.fragment_history, container, false
+        )
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setupUI()
         retrieveHistoryData()
     }
-
 
     private fun retrieveHistoryData() {
         val historyDataSetObserver = Observer<FxHistoryData> { fxHistoryData ->
@@ -41,12 +67,12 @@ class HistoryActivity : AppCompatActivity() {
     }
 
 
-    fun refreshData() {
+    private fun refreshData() {
         historyViewModel.refreshData()
     }
 
     private fun setupUI() {
-        val linearLayoutManager = LinearLayoutManager(this)
+        val linearLayoutManager = LinearLayoutManager(activity)
         binding.graphRecyclerView.apply {
             setHasFixedSize(true)
             layoutManager = linearLayoutManager

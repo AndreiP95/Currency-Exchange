@@ -1,30 +1,54 @@
 package com.example.currencyexchange.ui.settings
 
-import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import androidx.activity.viewModels
+import androidx.activity.OnBackPressedCallback
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.NavHostFragment
 import com.example.currencyexchange.R
-import com.example.currencyexchange.databinding.ActivitySettingsBinding
-import com.example.currencyexchange.ui.dashboard.DashboardActivity
-import com.example.currencyexchange.utils.BaseActivity
+import com.example.currencyexchange.databinding.FragmentSettingsBinding
+import com.example.currencyexchange.utils.BaseFragment
 import kotlinx.android.synthetic.main.item_curency_value.view.*
 
-class SettingsActivity : BaseActivity() {
+class SettingsFragment : BaseFragment() {
 
+    lateinit var binding: FragmentSettingsBinding
     val settingsViewModel: SettingsViewModel by viewModels()
-    private lateinit var binding: ActivitySettingsBinding
     lateinit var timer: String
     lateinit var currency: String
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySettingsBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val action = SettingsFragmentDirections.actionSettingsFragmentToDashboardFragment()
+                NavHostFragment.findNavController(this@SettingsFragment).navigate(action)
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = DataBindingUtil.inflate(
+            inflater, R.layout.fragment_settings, container, false
+        )
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this
         binding.buttonDashboard.textview.text = getString(R.string.dashboard_continue)
         createSpinner(binding.spinnerTimer, 1)
@@ -32,9 +56,11 @@ class SettingsActivity : BaseActivity() {
         setupInitialValues()
     }
 
+
     private fun createSpinner(spinner: Spinner, option: Int) {
         val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
-            this, R.layout.support_simple_spinner_dropdown_item,
+            requireContext(),
+            R.layout.support_simple_spinner_dropdown_item,
             when (option) {
                 1 -> settingsViewModel.timeList
                 else -> settingsViewModel.currencyList
@@ -62,20 +88,19 @@ class SettingsActivity : BaseActivity() {
     }
 
     private fun goToDashboard() {
-        startActivity(Intent(this, DashboardActivity::class.java))
+        Log.d("TAG", " $timer $currency")
         this.putRefreshTime(timer.toLong())
         this.putSelectedCurrency(currency)
-        finish()
+        val action = SettingsFragmentDirections.actionSettingsFragmentToDashboardFragment()
+        NavHostFragment.findNavController(this).navigate(action)
     }
 
     private fun setupInitialValues() {
-        timer = getSelectedRefreshTime().toString()
+        timer = getSelectedRefreshTime().div(1000).toString()
         binding.spinnerTimer.setSelection(settingsViewModel.timeList.indexOf(timer))
         currency = getBaseCurrency()
         binding.spinnerCurrency.setSelection(settingsViewModel.currencyList.indexOf(currency))
-
         binding.buttonDashboard.setOnClickListener { goToDashboard() }
 
     }
-
 }

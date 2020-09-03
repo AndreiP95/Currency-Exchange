@@ -1,11 +1,13 @@
-import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyexchange.R
 import com.example.currencyexchange.network.fxhistory.model.FxHistoryData
+import com.example.currencyexchange.ui.history.HistoryFragment
+import com.example.currencyexchange.ui.history.HistoryFragmentDirections
 import com.example.currencyexchange.utils.DataConstants
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
@@ -15,9 +17,8 @@ import kotlinx.android.synthetic.main.item_chart.view.*
 import java.util.*
 
 
-class HistoryDataAdapter(val context: Context) :
-    RecyclerView.Adapter<HistoryDataAdapter.HistoryViewHolder>(
-    ) {
+class HistoryDataAdapter(val fragment: HistoryFragment?) :
+    RecyclerView.Adapter<HistoryDataAdapter.HistoryViewHolder>() {
 
     lateinit var lineDataSet: LineDataSet
     lateinit var fxHistoryData: FxHistoryData
@@ -38,6 +39,15 @@ class HistoryDataAdapter(val context: Context) :
         updateDataSet(fxHistoryData, position)
         chart.data = LineData(lineDataSet)
         chart.invalidate()
+        chart.setOnClickListener {
+            fragment?.let {
+                val action = HistoryFragmentDirections.actionHistoryFragmentToGraphFragment(
+                    fxHistoryData, DataConstants.CURRENCY_LIST[position]
+                )
+                NavHostFragment.findNavController(it).navigate(action)
+            }
+        }
+
     }
 
     override fun getItemCount(): Int {
@@ -52,7 +62,7 @@ class HistoryDataAdapter(val context: Context) :
     private fun updateDataSet(fxHistoryData: FxHistoryData, position: Int) {
         lineDataSet = LineDataSet(getEntries(fxHistoryData, position), "")
         lineDataSet.setDrawFilled(true)
-        lineDataSet.fillDrawable = context.getDrawable(R.drawable.blue_to_white_gradient)
+        lineDataSet.fillDrawable = fragment?.context?.getDrawable(R.drawable.blue_to_white_gradient)
         lineDataSet.valueTextColor = Color.BLACK
         lineDataSet.valueTextSize = 12f
         lineDataSet.label = ""
@@ -84,6 +94,5 @@ class HistoryDataAdapter(val context: Context) :
         }
         return lineEntries
     }
-
 
 }

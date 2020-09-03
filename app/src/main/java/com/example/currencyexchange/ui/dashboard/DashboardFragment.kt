@@ -1,65 +1,71 @@
 package com.example.currencyexchange.ui.dashboard
 
-import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.currencyexchange.R
-import com.example.currencyexchange.databinding.ActivityDashboardBinding
+import com.example.currencyexchange.databinding.FragmentDashboardBinding
 import com.example.currencyexchange.network.fxdata.model.FxData
 import com.example.currencyexchange.ui.dashboard.adapter.CurrenciesAdapter
-import com.example.currencyexchange.ui.history.HistoryActivity
-import com.example.currencyexchange.ui.settings.SettingsActivity
-import com.example.currencyexchange.utils.BaseActivity
+import com.example.currencyexchange.utils.BaseFragment
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DashboardActivity : BaseActivity() {
+class DashboardFragment : BaseFragment() {
 
     private val dashboardViewModel by viewModel<DashboardViewModel>()
+    private lateinit var binding: FragmentDashboardBinding
     lateinit var adapter: CurrenciesAdapter
 
-    private lateinit var binding: ActivityDashboardBinding
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = DataBindingUtil.inflate(
+            inflater, R.layout.fragment_dashboard, container, false
+        )
+        setHasOptionsMenu(true)
+        return binding.root
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityDashboardBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this
         setupUI()
         retrieveAndUpdateData()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.appbar, menu)
-        return true
-    }
-
-
-    override fun onResume() {
         dashboardViewModel.initTimer(getSelectedRefreshTime())
         dashboardViewModel.setBaseCurrency(getBaseCurrency())
-        super.onResume()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
+        menu.clear()
+        menuInflater.inflate(R.menu.appbar, menu)
+        super.onCreateOptionsMenu(menu, menuInflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        lateinit var action: NavDirections
         val id = item.itemId
         if (id == R.id.action_item_one) {
             dashboardViewModel.stopTimer()
-            startActivity(Intent(this, HistoryActivity::class.java))
+            action = DashboardFragmentDirections.actionDashboardFragmentToHistoryFragment()
+            findNavController(this).navigate(action)
         } else if (id == R.id.action_item_two) {
             dashboardViewModel.stopTimer()
-            startActivity(Intent(this, SettingsActivity::class.java))
+            action = DashboardFragmentDirections.actionDashboardFragmentToSettingsFragment()
+            findNavController(this).navigate(action)
         }
         return super.onOptionsItemSelected(item)
     }
 
+
     private fun setupUI() {
-        val linearLayoutManager = LinearLayoutManager(this)
+        val linearLayoutManager = LinearLayoutManager(activity)
         binding.currencyRecyclerView.apply {
             setHasFixedSize(true)
             layoutManager = linearLayoutManager
@@ -97,7 +103,7 @@ class DashboardActivity : BaseActivity() {
             }
 
         }
-        dashboardViewModel.currencyList.observe(this, fxDataObserver)
+        dashboardViewModel.currencyList.observe(viewLifecycleOwner, fxDataObserver)
     }
 
 
@@ -108,5 +114,5 @@ class DashboardActivity : BaseActivity() {
         ).format(Calendar.getInstance().timeInMillis)
         }"
     }
-}
 
+}
