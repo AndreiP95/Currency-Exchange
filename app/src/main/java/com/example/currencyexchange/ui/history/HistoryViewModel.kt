@@ -2,11 +2,14 @@ package com.example.currencyexchange.ui.history
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.currencyexchange.network.fxhistory.HistoryClient
 import com.example.currencyexchange.network.fxhistory.model.FxHistoryData
 import com.example.currencyexchange.utils.CalendarConstants.Companion.DATE_FORMAT
 import com.example.currencyexchange.utils.CalendarConstants.Companion.MILISECONDS_IN_ONE_DAY
 import com.example.currencyexchange.utils.DataConstants
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import java.text.SimpleDateFormat
@@ -28,12 +31,13 @@ class HistoryViewModel : ViewModel(), KoinComponent {
         startDate = dateFormatter.format(calendar.timeInMillis - MILISECONDS_IN_ONE_DAY * 10)
     }
 
-    // TODO -> Use viewModelScope from coroutines
-
     fun refreshData() {
         getCurrentTime()
-        historyClient.fetchHistoryData(
-            DataConstants.CURRENCY_PARAMETERS, startDate, endDate, ratesData
-        )
+
+        viewModelScope.launch(Dispatchers.IO) {
+            historyClient.fetchHistoryData(
+                DataConstants.CURRENCY_PARAMETERS, startDate, endDate, ratesData
+            )
+        }
     }
 }
