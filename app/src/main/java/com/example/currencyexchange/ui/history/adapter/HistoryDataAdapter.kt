@@ -16,7 +16,6 @@ import com.github.mikephil.charting.data.LineDataSet
 import kotlinx.android.synthetic.main.item_chart.view.*
 import java.util.*
 
-
 class HistoryDataAdapter(val fragment: HistoryFragment?) :
     RecyclerView.Adapter<HistoryDataAdapter.HistoryViewHolder>() {
 
