@@ -2,7 +2,6 @@ package com.example.currencyexchange.ui.dashboard
 
 import android.os.Bundle
 import android.view.*
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.NavHostFragment.findNavController
@@ -19,6 +18,7 @@ import java.util.*
 class DashboardFragment : BaseFragment() {
 
     private val dashboardViewModel by viewModel<DashboardViewModel>()
+
     private lateinit var binding: FragmentDashboardBinding
     lateinit var adapter: CurrenciesAdapter
 
@@ -26,8 +26,8 @@ class DashboardFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_dashboard, container, false
+        binding = FragmentDashboardBinding.inflate(
+            inflater, container, false
         )
         setHasOptionsMenu(true)
         return binding.root
@@ -35,7 +35,6 @@ class DashboardFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.lifecycleOwner = this
         setupUI()
         retrieveAndUpdateData()
         dashboardViewModel.initTimer(getSelectedRefreshTime())
@@ -94,7 +93,7 @@ class DashboardFragment : BaseFragment() {
             if (fxData == null) {
                 binding.errorView.visibility = View.VISIBLE
             } else {
-                binding.updatedAtText?.text = setTimeStamp()
+                binding.updatedAtText.text = setTimeStamp()
                 binding.swipeRefreshCurrency.isRefreshing = false
                 adapter.updateBaseCurrency(dashboardViewModel.getBaseCurrency())
                 adapter.updateRatesList(fxData)

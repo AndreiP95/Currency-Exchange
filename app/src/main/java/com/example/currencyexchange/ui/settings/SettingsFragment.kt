@@ -1,7 +1,6 @@
 package com.example.currencyexchange.ui.settings
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,18 +8,16 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.activity.OnBackPressedCallback
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import com.example.currencyexchange.R
 import com.example.currencyexchange.databinding.FragmentSettingsBinding
 import com.example.currencyexchange.utils.BaseFragment
-import kotlinx.android.synthetic.main.item_curency_value.view.*
 
 class SettingsFragment : BaseFragment() {
 
     lateinit var binding: FragmentSettingsBinding
-    val settingsViewModel: SettingsViewModel by viewModels()
+    private val settingsViewModel: SettingsViewModel by viewModels()
     lateinit var timer: String
     lateinit var currency: String
 
@@ -41,15 +38,14 @@ class SettingsFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_settings, container, false
+        binding = FragmentSettingsBinding.inflate(
+            inflater, container, false
         )
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.lifecycleOwner = this
         binding.buttonDashboard.textview.text = getString(R.string.dashboard_continue)
         createSpinner(binding.spinnerTimer, 1)
         createSpinner(binding.spinnerCurrency, 2)
@@ -88,7 +84,6 @@ class SettingsFragment : BaseFragment() {
     }
 
     private fun goToDashboard() {
-        Log.d("TAG", " $timer $currency")
         this.putRefreshTime(timer.toLong())
         this.putSelectedCurrency(currency)
         val action = SettingsFragmentDirections.actionSettingsFragmentToDashboardFragment()
@@ -100,7 +95,7 @@ class SettingsFragment : BaseFragment() {
         binding.spinnerTimer.setSelection(settingsViewModel.timeList.indexOf(timer))
         currency = getBaseCurrency()
         binding.spinnerCurrency.setSelection(settingsViewModel.currencyList.indexOf(currency))
-        binding.buttonDashboard.setOnClickListener { goToDashboard() }
+        binding.buttonDashboard.root.setOnClickListener { goToDashboard() }
 
     }
 }
