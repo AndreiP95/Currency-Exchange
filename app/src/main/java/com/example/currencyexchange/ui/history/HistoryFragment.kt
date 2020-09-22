@@ -6,11 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.currencyexchange.R
 import com.example.currencyexchange.databinding.FragmentHistoryBinding
 import com.example.currencyexchange.network.fxhistory.model.FxHistoryData
 import com.example.currencyexchange.utils.BaseFragment
@@ -40,8 +38,8 @@ class HistoryFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_history, container, false
+        binding = FragmentHistoryBinding.inflate(
+            inflater, container, false
         )
         return binding.root
     }
@@ -51,6 +49,8 @@ class HistoryFragment : BaseFragment() {
         setupUI()
         retrieveHistoryData()
     }
+
+    // TODO -> Refactor with coroutines
 
     private fun retrieveHistoryData() {
         val historyDataSetObserver = Observer<FxHistoryData> { fxHistoryData ->
@@ -62,7 +62,7 @@ class HistoryFragment : BaseFragment() {
                 historyDataAdapter.notifyDataSetChanged()
             }
         }
-        historyViewModel.ratesData.observe(this, historyDataSetObserver)
+        historyViewModel.ratesData.observe(viewLifecycleOwner, historyDataSetObserver)
         refreshData()
     }
 

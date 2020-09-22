@@ -17,6 +17,8 @@ class DashboardModelTest : KoinComponent {
     val client by inject<CurrenciesClient>()
     val dashboardViewModel by inject<DashboardViewModel>()
 
+    // TODO -> Should add more tests
+
     @Before
     fun initApp() {
         val app = BaseApplication()

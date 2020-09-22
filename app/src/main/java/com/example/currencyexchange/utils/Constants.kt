@@ -23,8 +23,8 @@ class DataConstants {
         val CURRENCY_LIST = listOf("RON", "BGN", "USD")
         val CURRENCY_PARAMETERS = CURRENCY_LIST.fold("") { acc, element -> acc + "$element," }
             .removeSuffix(",")
-        val REFRESH_TIMER_KEY = "refresh_timer"
-        val BASE_CURRENCY_KEY = "base_currency"
+        const val REFRESH_TIMER_KEY = "refresh_timer"
+        const val BASE_CURRENCY_KEY = "base_currency"
 
     }
 }

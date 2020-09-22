@@ -28,6 +28,8 @@ class HistoryViewModel : ViewModel(), KoinComponent {
         startDate = dateFormatter.format(calendar.timeInMillis - MILISECONDS_IN_ONE_DAY * 10)
     }
 
+    // TODO -> Use viewModelScope from coroutines
+
     fun refreshData() {
         getCurrentTime()
         historyClient.fetchHistoryData(
